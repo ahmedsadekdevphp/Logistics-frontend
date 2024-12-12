@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "my-new-app",
-    "slug": "my-new-app",
+    "name": "Logistics",
+    "slug": "Logistics",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

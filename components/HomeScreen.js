@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Stylesheet } from 'react-native';
 import { Styles } from '../assets/style';
+import Icon from 'react-native-vector-icons/Ionicons';
+
 const HomeScreen = ({ navigation }) => {
   return (
     <View style={Styles.container}>
@@ -11,6 +13,7 @@ const HomeScreen = ({ navigation }) => {
           style={Styles.menueCard}
           onPress={() => navigation.navigate('Truck Request')}
         >
+         <Icon name='car' style={Styles.iconStyle}  />
 
           <Text style={Styles.menueCardText}>Request Truck</Text>
         </TouchableOpacity>
@@ -19,6 +22,7 @@ const HomeScreen = ({ navigation }) => {
           style={Styles.menueCard}
           onPress={() => navigation.navigate('Dashboard')}
         >
+                   <Icon name='grid' style={Styles.iconStyle}   />
           <Text style={Styles.menueCardText}>Dashboard</Text>
         </TouchableOpacity>
 
@@ -26,6 +30,7 @@ const HomeScreen = ({ navigation }) => {
           style={Styles.menueCard}
           onPress={() => navigation.navigate('Logout')}
         >
+                             <Icon name='log-out' style={Styles.iconStyle}   />
           <Text style={Styles.menueCardText}>Logout</Text>
         </TouchableOpacity>
       </View>

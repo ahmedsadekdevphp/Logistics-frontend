@@ -235,6 +235,11 @@ export const Styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
     },
+    iconStyle: {
+        color: 'rgb(118, 74, 188)',
+        fontSize:30,
+        fontWeight: 'bold',
+    }
 
 });
 

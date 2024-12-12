@@ -35,8 +35,6 @@ export default function Tabs() {
 
                         if (route.name === 'Home') {
                             iconName = focused ? 'home' : 'home-outline';
-                        } else if (route.name === 'Settings') {
-                            iconName = focused ? 'settings' : 'settings-outline';
                         } else if (route.name === 'Register') {
                             iconName = focused ? 'person-add' : 'person-add-outline';
                         } else if (route.name === 'Login') {
