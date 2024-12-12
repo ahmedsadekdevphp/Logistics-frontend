@@ -30,8 +30,7 @@ const LogoutScreen = () => {
 
     return (
         <View style={Styles.container}>
-        <View style={Styles.FormCard}>
-  
+        <View>
             <Text>Are you sure you want to log out?</Text>
             <TouchableOpacity style={Styles.button} onPress={logout}>
                 <Text style={Styles.buttonText}>Log Out</Text>

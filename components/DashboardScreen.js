@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList,  TouchableOpacity} from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { Styles } from '../assets/style';
 import config from '../config/config';
+import { useFocusEffect } from '@react-navigation/native';
+
 const DashboardScreen = () => {
     const [orders, setOrders] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -11,7 +13,7 @@ const DashboardScreen = () => {
     const [loading, setLoading] = useState(false);
 
     const fetchOrders = async (page = 1) => {
-        setLoading(true); // Set loading to true when a fetch starts
+        setLoading(true);
 
         try {
             const token = await AsyncStorage.getItem('userToken');
@@ -36,12 +38,6 @@ const DashboardScreen = () => {
         }
     };
 
-    // Fetch orders on component mount
-    useEffect(() => {
-        fetchOrders();
-    }, []);
-
-    // Render each order item
     const renderOrderItem = ({ item }) => (
         <View style={Styles.orderItem}>
             <Text style={Styles.idText}>Order ID: {item.order_no}</Text>
@@ -55,12 +51,17 @@ const DashboardScreen = () => {
         </View>
     );
 
-    // Handle pagination button clicks
     const handlePagination = (page) => {
         if (page >= 1 && page <= totalPages) {
             fetchOrders(page);
         }
     };
+
+    useFocusEffect(
+        React.useCallback(() => {
+            fetchOrders();
+        }, [])
+    );
 
     return (
         <View style={Styles.cardContainer}>
@@ -72,6 +73,7 @@ const DashboardScreen = () => {
                 renderItem={renderOrderItem}
                 ListFooterComponent={loading ? <Text>Loading...</Text> : null}
             />
+
             <View style={Styles.paginationContainer}>
                 <TouchableOpacity
                     style={[Styles.paginationButton, currentPage === 1 && Styles.disabledButton]}
@@ -91,8 +93,8 @@ const DashboardScreen = () => {
                     <Text style={Styles.paginationText}>Next</Text>
                 </TouchableOpacity>
             </View>
-
         </View>
     );
 };
+
 export default DashboardScreen;

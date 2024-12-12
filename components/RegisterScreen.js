@@ -11,7 +11,6 @@ const RegisterScreen = () => {
     const [password, setPassword] = useState('');
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
     const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
     const [isModalVisible, setModalVisible] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
 
@@ -61,18 +60,15 @@ const RegisterScreen = () => {
                 password,
                 password_confirmation: passwordConfirmation,
             });
-            if (response.status === 200) {
-                setModalMessage('Registration successfull!');
-                setModalVisible(true);
+            if (response.data.status === 201) {
                 setName('');
                 setEmail('');
                 setPassword('');
                 setPasswordConfirmation('');
                 setError('');
-            } else {
-                setModalMessage('Unexpected response. Please try again.');
-                setModalVisible(true);
             }
+            setModalMessage(response.data.message);
+            setModalVisible(true);
         } catch (error) {
             if (error.response && error.response.status === 422) {
                 const validationErrors = error.response.data.errors;
@@ -136,7 +132,6 @@ const RegisterScreen = () => {
                     <Text style={Styles.errorText}>{error.passwordConfirmation}</Text>
                 ) : null}
 
-                {success ? <Text style={Styles.successText}>{success}</Text> : null}
 
                 <TouchableOpacity style={Styles.button} onPress={handleRegister}>
                     <Text style={Styles.buttonText}>Register</Text>
@@ -151,5 +146,4 @@ const RegisterScreen = () => {
     );
 
 };
-
 export default RegisterScreen;

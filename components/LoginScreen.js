@@ -19,7 +19,6 @@ const LoginScreen = ({ navigation }) => {
   const validateFields = () => {
     let isValid = true;
     const errors = { email: '', password: '' };
-    // Validate email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email.trim()) {
       errors.email = 'Email is required';
@@ -29,7 +28,6 @@ const LoginScreen = ({ navigation }) => {
       isValid = false;
     }
 
-    // Validate password
     if (!password.trim()) {
       errors.password = 'Password is required';
       isValid = false;
@@ -47,7 +45,6 @@ const LoginScreen = ({ navigation }) => {
         password,
       });
 
-      // Handle successful login
       if (response.data.token) {
         await AsyncStorage.setItem('userToken', response.data.token);
         refreshPage();

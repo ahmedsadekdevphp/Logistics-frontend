@@ -1,26 +1,49 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React, { useState } from 'react';
-import { Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Text, TextInput, TouchableOpacity, View,ActivityIndicator } from 'react-native';
 import { Styles } from '../assets/style';
 import CustomModal from './CustomModal';
+import config from '../config/config';
 export default function TruckRequestScreen() {
   const [location, setLocation] = useState('');
   const [size, setSize] = useState('');
   const [weight, setWeight] = useState('');
   const [pickupTime, setPickupTime] = useState(new Date());
   const [deliveryTime, setDeliveryTime] = useState(new Date());
-  const [showPickupPicker, setShowPickupPicker] = useState(false);
-  const [showDeliveryPicker, setShowDeliveryPicker] = useState(false);
-  const [error, setError] = useState({ email: '', password: '' });
   const [isModalVisible, setModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
-
-  const handleSubmit = async () => {
-    if (!location || !size || !weight) {
-      setModalMessage('Please fill in all fields!');
+  const [loading, setLoading] = useState(false);
+  const validateFields = () => {
+    if (!location.trim()) {
+      setModalMessage('Location is required.');
       setModalVisible(true);
+      return false;
     }
+
+    if (!size.trim() || isNaN(size) || size <= 0) {
+      setModalMessage('Size must be a positive number.');
+      setModalVisible(true);
+      return false;
+    }
+
+    if (!weight.trim() || isNaN(weight) || weight <= 0) {
+      setModalMessage('Weight must be a positive number.');
+      setModalVisible(true);
+      return false;
+    }
+
+    if (pickupTime >= deliveryTime) {
+      setModalMessage('Delivery time must be later than pickup time.');
+      setModalVisible(true);
+      return false;
+    }
+
+    return true;
+  };
+  const handleSubmit = async () => {
+    if (!validateFields()) return;
+    setLoading(true);
     const requestData = {
       location,
       size,
@@ -28,23 +51,24 @@ export default function TruckRequestScreen() {
       pickupTime: pickupTime.toISOString(),
       deliveryTime: deliveryTime.toISOString(),
     };
-
     try {
       const token = await AsyncStorage.getItem('userToken');
-      const response = await axios.post('http://127.0.0.1:8000/api/orders', requestData, {
+      const response = await axios.post(`${config.sendRequest}`, requestData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
       });
-      if (response.status === 200) {
-        const orderNo = response.data.data;
-        setModalMessage(`Your order was successfully submitted! Order number is: ${orderNo}`);
-        setModalVisible(true);
-      } else {
-        setModalMessage('Unexpected response. Please try again.');
-        setModalVisible(true);
+      if (response.data.status === 201) {
+        setLocation('');
+        setSize('');
+        setWeight('');
+        setPickupTime(new Date());
+        setDeliveryTime(new Date());
       }
+      setModalMessage(response.data.message);
+      setModalVisible(true);
+
     } catch (error) {
       if (error.response && error.response.status === 422) {
         const validationErrors = error.response.data.errors;
@@ -63,10 +87,13 @@ export default function TruckRequestScreen() {
         setModalVisible(true);
       }
       else {
-        //setModalMessage('Network error. Please try again.!');
-        //setModalVisible(true);
+        setModalMessage('Network error. Please try again.!');
+        setModalVisible(true);
       }
+    } finally {
+      setLoading(false);
     }
+
   };
 
   return (
@@ -103,25 +130,38 @@ export default function TruckRequestScreen() {
 
         <View style={Styles.row}>
           <View style={Styles.halfWidth}>
+          <Text style={Styles.label}>Pickup Time</Text>
             <input
               type="datetime-local"
               value={pickupTime.toISOString().slice(0, 16)}
               onChange={(e) => setPickupTime(new Date(e.target.value))}
+              min={new Date().toISOString().slice(0, 16)}
               style={Styles.input}
             />
           </View>
           <View style={Styles.halfWidth}>
+          <Text style={Styles.label}>Delivery Time</Text>
             <input
               type="datetime-local"
               value={deliveryTime.toISOString().slice(0, 16)}
               onChange={(e) => setDeliveryTime(new Date(e.target.value))}
+              min={new Date().toISOString().slice(0, 16)}
               style={Styles.input}
             />
           </View>
         </View>
-        <TouchableOpacity style={Styles.button} onPress={handleSubmit}>
-          <Text style={Styles.buttonText}>Submit Request</Text>
+        <TouchableOpacity
+          style={[Styles.button, loading && Styles.buttonDisabled]}
+          onPress={handleSubmit}
+          disabled={loading} // Disable button while loading
+        >
+          {loading ? (
+            <ActivityIndicator color="#fff" /> 
+          ) : (
+            <Text style={Styles.buttonText}>Submit Request</Text>
+          )}
         </TouchableOpacity>
+
         <CustomModal
           isVisible={isModalVisible}
           message={modalMessage}

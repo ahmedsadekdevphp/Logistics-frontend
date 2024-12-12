@@ -1,33 +1,37 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
-
+import { View, Text, TouchableOpacity, Stylesheet } from 'react-native';
+import { Styles } from '../assets/style';
 const HomeScreen = ({ navigation }) => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Welcome to Logistic App!</Text>
-      <Text style={styles.subtitle}>You are now logged in.</Text>
-      
+    <View style={Styles.container}>
+      <Text style={Styles.meuetitle}>Welcome to Logistics App!</Text>
+
+      <View style={Styles.menuContainer}>
+        <TouchableOpacity
+          style={Styles.menueCard}
+          onPress={() => navigation.navigate('Truck Request')}
+        >
+
+          <Text style={Styles.menueCardText}>Request Truck</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={Styles.menueCard}
+          onPress={() => navigation.navigate('Dashboard')}
+        >
+          <Text style={Styles.menueCardText}>Dashboard</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={Styles.menueCard}
+          onPress={() => navigation.navigate('Logout')}
+        >
+          <Text style={Styles.menueCardText}>Logout</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#555',
-    marginBottom: 20,
-  },
-});
 
 export default HomeScreen;

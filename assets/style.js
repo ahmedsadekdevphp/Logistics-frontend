@@ -98,6 +98,8 @@ export const Styles = StyleSheet.create({
         fontSize: 16,
         marginVertical: 8,
         color: '#555',
+        padding: 5,
+        margin: 5
     },
     input: {
         height: 40,
@@ -181,13 +183,13 @@ export const Styles = StyleSheet.create({
     },
     pageNumber: {
         alignSelf: 'center',
-    },cardContainer: {
+    }, cardContainer: {
         flex: 1,
         padding: 25,
-        margin:10,
+        margin: 10,
         backgroundColor: '#fff',
     },
-    
+
     paginationButton: {
         paddingVertical: 8,
         paddingHorizontal: 16,
@@ -198,7 +200,41 @@ export const Styles = StyleSheet.create({
     },
     disabledButton: {
         opacity: 0.5,
-    }
+    },
+    meuetitle: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    subtitle: {
+        fontSize: 16,
+        color: '#555',
+        marginBottom: 20,
+    },
+    menuContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        flexWrap: 'wrap',
+        width: '100%',
+    },
+    menueCard: {
+        backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 10,
+        margin: 10,
+        width: '40%',
+        alignItems: 'center',
+        elevation: 3,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+    },
+    menueCardText: {
+        color: 'rgb(118, 74, 188)',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
 
 });
 
